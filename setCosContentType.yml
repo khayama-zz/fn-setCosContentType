@@ -1,0 +1,24 @@
+packages:
+  setCosContentType:
+    version: 1.0
+    license: Apache-2.0
+    actions:
+      setCosContentType:
+        version: 1.0
+        description: replace with reference content type
+        docker: openwhisk/dockerskeleton
+        function: setCosContentType.sh
+        inputs:
+
+    triggers:
+      cos-object-write:
+        feed: /whisk.system/cos/changes
+        inputs:
+          bucket: $MY_BUCKET # The COS bucket must be regional and exist in the same location as the namespace
+          event_types: write # https://cloud.ibm.com/docs/openwhisk?topic=openwhisk-pkg_obstorage#pkg_obstorage_ev_ch_ref_trig
+
+    rules:
+      cos-object-write-setCosContentType:
+        description: Action is triggered by object-write operation
+        action: setCosContentType
+        trigger: cos-object-write
